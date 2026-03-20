@@ -1,79 +1,22 @@
-$ cat << 'EOF'
-请用以下完整内容替换 build.yml：
-
 name: Build APK
-
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip build-essential git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev cmake libffi-dev libssl-dev lld
-    
-    - name: Install buildozer
-      run: pip install buildozer
-    
-    - name: Build APK
-      run: buildozer android debug
-      timeout-minutes: 30
-    
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: numberblocks-apk
-        path: bin/*.apk
-EOF
-
-请用以下完整内容替换 build.yml：
-
-name: Build APK
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip build-essential git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev cmake libffi-dev libssl-dev lld
-    
-    - name: Install buildozer
-      run: pip install buildozer
-    
-    - name: Build APK
-      run: buildozer android debug
-      timeout-minutes: 30
-    
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: numberblocks-apk
-        path: bin/*.apk
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update && sudo apt-get install -y python3-pip build-essential git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev cmake libffi-dev libssl-dev lld
+      - run: pip install buildozer
+      - run: buildozer android debug
+        timeout-minutes: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: numberblocks-apk
+          path: bin/*.apk
